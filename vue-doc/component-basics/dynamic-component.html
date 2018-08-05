@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .tab-button {
+            padding: 6px 10px;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            background: #f0f0f0;
+            margin-bottom: -1px;
+            margin-right: -1px;
+        }
+
+        .tab-button:hover {
+            background: #e0e0e0;
+        }
+
+        .tab-button.active {
+            background: #e0e0e0;
+        }
+
+        .tab {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <button v-for="tab in tabs" :key="tab" :class="['tab-button', {active: currentTab === tab}]" @click="currentTab = tab">{{tab}}</button>
+        <component :is="currentTabComponent"></component>
+    </div>
+
+    <script>
+        Vue.component('tab-home', {
+            template: `
+                <div>Home component</div>
+            `
+        });
+        Vue.component('tab-posts', {
+            template: `
+                <div>Posts component</div>
+            `
+        });
+        Vue.component('tab-archive', {
+            template: `
+                <div>Archive component</div>
+            `
+        });
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                currentTab: 'Home',
+                tabs: ['home', 'posts', 'archive']
+            },
+            computed: {
+                currentTabComponent() {
+                    return 'tab-' + this.currentTab.toLowerCase();
+                }
+            },
+            methods: {
+                // enlargeAmount: emit的数据
+                onEnlargeText(enlargeAmount) {
+                    this.postFontSize += enlargeAmount;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

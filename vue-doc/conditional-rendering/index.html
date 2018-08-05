@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p v-if="ok">Yes</p>
+        <p v-else>No</p>
+    </div>
+    <div id="key">
+        <template v-if="loginType === 'username'">
+            <label>Username</label>
+            <!-- 使用Key标识这个input和下面的input是两个完全独立的组件 -->
+            <input placeholder="Enter your username" key="username-input">
+        </template>
+        <template v-else>
+            <label>Email</label>
+            <input placeholder="Enter your email address" key="email-input">
+        </template>
+        <button @click="toggleLoginType">Toggle login type</button>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                ok: true
+            }
+        });
+
+        var key = new Vue({
+            el: '#key',
+            data: {
+                loginType: 'username'
+            },
+            methods: {
+                toggleLoginType() {
+                    if (this.loginType === 'username') {
+                        this.loginType = 'email';
+                    } else {
+                        this.loginType = 'username';
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

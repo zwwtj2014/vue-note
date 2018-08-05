@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>{{message}}</p>
+
+        <span v-once>这个值将不会改变: {{message}}</span>
+
+        <p>Using mustachs: {{rawHtml}}</p>
+        <p>Using v-html directive:
+            <span v-html="rawHtml"></span>
+        </p>
+
+        <div @click="parent">
+            <a href="http://baidu.com" @click.prevent="child">
+                測試修改符
+            </a>
+        </div>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue!',
+                rawHtml: '<span style="color:red">This should be red.</span>'
+            },
+            methods: {
+                parent() {
+                    console.log('parent catch');
+                },
+                child(e) {
+                    console.log('child catch');
+                    e.preventDefault();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

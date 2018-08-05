@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <button @click="greet">Greet Without Param</button>
+        <button @click="greet($event)">Greet With Param $event</button>
+        <button @click="say('Hi')">Say With Param 'Hi'</button>
+        <button @click="say('Hi',$event)">Say With Param 'Hi' & $event</button>
+    </div>
+    <hr>
+    <div id="event-modifiers" @click="show">
+        <a href="http://www.google.com" @click.once.prevent="show">once & prevent</a>
+        <!-- 阻止单击事件继续传播 -->
+        <a href="http://www.google.com" @click.stop="show">stop</a>
+        <!-- 阻止默认行为 -->
+        <a href="http://www.google.com" @click.prevent="show">prevent</a>
+        <!-- 修饰符可以串联 -->
+        <a href="http://www.google.com" @click.stop.prevent="show">stop & prevent</a>
+        <!-- 添加事件监听器时使用事件捕获模式 -->
+        <!-- 即元素自身触发的事件先在此处处理，然后才交由内部元素进行处理 -->
+        <!-- 这里显示的顺序是: A => SPAN => DIV-->
+        <a href="http://www.google.com" @click.capture.prevent="show">
+            <span @click="show">capture.prevent</span>
+        </a>
+    </div>
+    <hr>
+    <div id="key-modifiers">
+        <input @keyup.down="show" placeholder="@keyup.down">
+        <input @keyup.enter="show" placeholder="@keyup.enter">
+        <input @keyup.13="show" placeholder="@keyup.13">
+    </div>
+    <hr>
+    <div id="system-modifiers">
+        <input @keyup.alt.67="show" placeholder="@keyup.alt.67">
+        <input @keyup.fn.down="show" placeholder="@keyup.fn.down">
+        <div @click.ctrl="show"> @click.ctrl </div>
+
+        <!-- 即使 Alt 或 Shift 被一同按下时也会触发 -->
+        <button @click.ctrl="show">@click.ctrl="show"</button>
+
+        <!-- 有且只有 Ctrl 被按下的时候才触发 -->
+        <button @click.ctrl.exact="show">@click.ctrl.exact="show"</button>
+
+        <!-- 没有任何系统修饰符被按下的时候才触发 -->
+        <button @click.exact="show">@click.exact="show"</button>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {},
+            methods: {
+                greet(event) {
+                    console.log(event);
+                },
+                say(msg, event) {
+                    if (event) {
+                        console.log(event);
+                        event.preventDefault();
+                    }
+                    alert(msg);
+                }
+            }
+        });
+
+        var EventModifiers = new Vue({
+            el: '#event-modifiers',
+            data: {},
+            methods: {
+                show(event) {
+                    alert(event.currentTarget.tagName);
+                }
+            }
+        });
+
+        var KeyModifiers = new Vue({
+            el: '#key-modifiers',
+            methods: {
+                show(event) {
+                    alert(event.currentTarget.tagName);
+                }
+            }
+        });
+
+        var SystemModifiers = new Vue({
+            el: '#system-modifiers',
+            methods: {
+                show(event) {
+                    alert(event.currentTarget.tagName);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

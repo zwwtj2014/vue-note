@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <custom-input v-model="searchText"></custom-input>
+        <div :style="{fontSize: postFontSize + 'em'}">
+            <blog-post v-for="post in posts" :post="post" :key="post.id" @enlarge-text="onEnlargeText"></blog-post>
+        </div>
+        <input type="text" v-model="searchText">
+        <input type="text" :value="searchText" @input="searchText = $event.target.value">
+
+        <alert-box>
+            Somthing bad happened!.
+        </alert-box>
+    </div>
+
+    <script>
+        Vue.component('blog-post', {
+            props: [
+                'post'
+            ],
+            template: `
+                <div class="blog-post">
+                    <h3>{{ post.title }}</h3>
+                    <button @click="$emit('enlarge-text', 0.1)">Enlarge text</button>
+                    <div v-html="post.content"></div>
+                </div>
+            `
+        });
+
+        // 通过自定义Input组件, 可以看到`v-model`其实就是 :value & `@input` 的组合
+        Vue.component('custom-input', {
+            props: ['value'],
+            methods: {
+                onInput($event) {
+                    this.$emit('input', $event.target.value)
+                }
+            },
+            template: `
+                <input :value="value" @input="onInput">
+            `
+        });
+
+        Vue.component('alert-box', {
+            template: `
+                <div>
+                    <strong>Error: </strong>
+                    <slot></slot>
+                </div>
+            `
+        });
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                posts: [{
+                    id: 1,
+                    title: 'My journey with Vue',
+                    content: 'My journey with Vue'
+                }, {
+                    id: 2,
+                    title: 'Blogging with Vue',
+                    content: 'Blogging with Vue'
+                }, {
+                    id: 3,
+                    title: 'Why Vue is so fun',
+                    content: 'Why Vue is so fun'
+                }],
+                postFontSize: 1,
+                searchText: ''
+            },
+            methods: {
+                // enlargeAmount: emit的数据
+                onEnlargeText(enlargeAmount) {
+                    this.postFontSize += enlargeAmount;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

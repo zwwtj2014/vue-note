@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <textarea>{{message}}</textarea>
+        <input type="checkbox" v-model="toggle" true-value="yes" false-value="no">
+        <input type="radio" v-model="pick" v-bind:value="a">
+        <select v-model="selected">
+            <!-- 内联对象字面量 -->
+            <option v-bind:value="{ number: 123 }">123</option>
+        </select>
+    </div>
+    <div id="modifiers">
+        <!-- 在“change”时而非“input”时更新 -->
+        <input v-model.lazy="msg">
+
+        <input v-model.number="age" type="number">
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'zww',
+                toggle: '',
+                pick: '',
+                a: '',
+                selected: ''
+            }
+        });
+
+        var modifiers = new Vue({
+            el: '#modifiers',
+            data: {
+                msg: '',
+                age: 0
+            }
+        });
+    </script>
+</body>
+
+</html>

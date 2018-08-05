@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <my-component class="baz boo"></my-component>
+    </div>
+    <div id="object">
+        <div class="static" :class="{active: isActive, 'text-danger': hasError}">对象绑定——内联</div>
+        <div class="static" :class="objectClass">对象绑定——直接对象</div>
+        <div class="static" :class="computedObjClass">对象绑定——绑定一个计算属性</div>
+        <div :style="{color: activeColor, fontSize: fontSize + 'px'}">内联Style</div>
+    </div>
+    <div id="array">
+        <div v-bind:class="[activeClass, errorClass]">数组绑定</div>
+        <div v-bind:class="[isActive?activeClass: '', errorClass]">数组绑定——支持三元表达式</div>
+        <div v-bind:class="[{activeClass: isActive}, errorClass]">数组绑定——支持对象语法</div>
+        <div v-bind:style="[baseStyles, overridingStyles]">内联Style</div>
+    </div>
+    <script>
+        Vue.component('my-component', {
+            template: '<p class="foo bar">Hi</p>'
+        });
+
+        var app = new Vue({
+            el: '#app'
+        });
+
+        var object = new Vue({
+            el: '#object',
+            data: {
+                isActive: true,
+                error: null,
+                hasError: false,
+                objectClass: {
+                    active: true,
+                    'text-danger': true
+                },
+                activeColor: 'red',
+                fontSize: 24
+            },
+            computed: {
+                computedObjClass() {
+                    return {
+                        active: this.isActive && !this.error,
+                        'text-danger': this.error && this.error.type === 'fatal'
+                    }
+                }
+            }
+        });
+
+        var array = new Vue({
+            el: '#array',
+            data: {
+                activeClass: 'active',
+                isActive: true,
+                errorClass: 'text-danger',
+                baseStyles: 'a',
+                overridingStyles: 'b'
+            }
+        });
+    </script>
+</body>
+
+</html>

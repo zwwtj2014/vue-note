@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="v-for-array">
+        <ul>
+            <li v-for="(item,index) in items">
+                {{parentMessage}} - {{index}} - {{item.message}}
+            </li>
+        </ul>
+        <pre>
+            <span v-for="n in 10">{{n}} </span>
+        </pre>
+    </div>
+    <div id="v-for-object">
+        <ul>
+            <li v-for="(val, key, index) in object">
+                {{index}}. {{key}}: {{val}}
+            </li>
+        </ul>
+    </div>
+    <hr>
+    <div id="not-reactive-array">
+        <ul>
+            <li v-for="item in items">
+                {{item}}
+            </li>
+        </ul>
+        <button @click="updateByIndex">updateByIndex</button>
+        <button @click="updateByIndexWithSet">updateByIndexWithSet</button>
+    </div>
+    <script>
+        var VForArray = new Vue({
+            el: '#v-for-array',
+            data: {
+                parentMessage: 'Parent',
+                items: [{
+                    message: 'Foo'
+                }, {
+                    message: 'Bar'
+                }]
+            }
+        });
+
+        var VForObject = new Vue({
+            el: '#v-for-object',
+            data: {
+                object: {
+                    firstName: 'John',
+                    lastName: 'Doe',
+                    age: 30
+                }
+            }
+        });
+
+        var NotReactiveArray = new Vue({
+            el: '#not-reactive-array',
+            data: {
+                items: ['a', 'b', 'c']
+            },
+            methods: {
+                updateByIndex() {
+                    this.items[1] = 'x'; // 不会响应式变化
+                },
+                updateByIndexWithSet() {
+                    // Vue.set(this.items, 1, 'y'); // 会响应式变化
+                    this.$set(this.items, 1, 'y'); // this.$set 是 Vue.set 的别名
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
