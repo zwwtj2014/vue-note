@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>markdown editor</title>
+
+    <link rel="stylesheet" href="index.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/lodash@4.16.0"></script>
+</head>
+
+<body>
+    <div id="editor">
+        <textarea :value="input" @input="update"></textarea>
+        <div v-html="content"></div>
+    </div>
+    <script src="https://unpkg.com/marked@0.4.0/lib/marked.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#editor',
+            data: {
+                input: '# hello'
+            },
+            computed: {
+                content() {
+                    return marked(this.input);
+                }
+            },
+            methods: {
+                update: _.debounce(function (e) {
+                    this.input = e.target.value
+                }, 300)
+            }
+        });
+    </script>
+</body>
+
+</html>

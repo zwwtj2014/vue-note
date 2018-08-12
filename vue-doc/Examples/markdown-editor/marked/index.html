@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>测试 markedjs</title>
+</head>
+
+<body>
+    <div>
+        <p>markedjs: A markdown parser and compiler. Built for speed.</p>
+        <p>github: https://marked.js.org/</p>
+    </div>
+    <hr>
+    <div id="content"></div>
+    <script src="https://unpkg.com/marked@0.4.0/lib/marked.js"></script>
+    <script>
+        var content = document.getElementById('content');
+        content.innerHTML = marked('# Marked in the browser\n\nRendered by **marked**.');
+    </script>
+</body>
+
+</html>

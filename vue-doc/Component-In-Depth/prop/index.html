@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 传入一个对象的所有属性 -->
+        <demo-component v-bind="post" :post="post" non-prop="non-prop"></demo-component>
+        <p>{{this.post.id}}</p>
+        <hr>
+        <base-input v-model="username" class="username-inpu123t" placeholder="Enter your username" xxx="xxx"></base-input>
+        <p>{{username}}</p>
+    </div>
+    <script>
+        Vue.component('demoComponent', {
+            inheritAttrs: false,
+            template: `<pre>
+                    {
+                        id: {{id}},
+                        title: {{title}},
+                        post: {{post}}
+                    }
+                </pre>`,
+            props: {
+                id: {
+                    type: Number,
+                    default: 0
+                },
+                title: {
+                    type: String,
+                    default: 'title'
+                },
+                post: Object
+            },
+            created() {
+                this.post.id = 2;
+                console.log(this.$attrs);
+            },
+        });
+
+        Vue.component('base-input', {
+            inheritAttrs: false,
+            props: ['label', 'value'],
+            template: `
+                <label>
+                    {{ label }}
+                    <input v-bind="$attrs" v-bind:value="value" v-on:input="$emit('input', $event.target.value)">
+                </label>
+            `,
+            created() {
+                console.log(this.$attrs);
+            }
+        });
+        var app = new Vue({
+            el: '#app',
+            data: {
+                username: '',
+                post: {
+                    id: 1,
+                    title: 'My Journey with Vue'
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
