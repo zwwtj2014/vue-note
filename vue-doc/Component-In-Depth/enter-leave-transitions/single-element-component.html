@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>单元素、组件的过渡</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1">
+    <link rel="stylesheet" href="single-element-component.css">
+</head>
+
+<body>
+    <div id="app0">
+        <button @click="show = !show">Toggle</button>
+        <transition name="fade">
+            <p v-if="show">hello fade</p>
+        </transition>
+    </div>
+    <div id="app1">
+        <button @click="show = !show">Toggle</button>
+        <transition name="slide-fade">
+            <p v-if="show">这里是普通的CSS过渡测试</p>
+        </transition>
+
+    </div>
+    <div id="app2">
+        <button @click="show = !show">Toggle</button>
+        <transition name="bounce">
+            <p v-if="show" @animationstart="startEvent" @animationend="endEvent">这里是CSS动画测试****************************************************************************</p>
+        </transition>
+    </div>
+    <div id="app3">
+        <button @click="show = !show">Toggle</button>
+        <transition name="custom-classes-transition" enter-active-class="animated tada" leave-active-class="animated bounceOutRight">
+            <p v-if="show">这里是自定义过渡类名，集成第三方类库animation测试****************************************************************************</p>
+        </transition>
+    </div>
+    <div id="app4">
+        <button @click="show = !show">Toggle</button>
+        <transition appear appear-class="animated tada" appear-active-class="animated bounceOutRight" :duration="5000">
+            <p v-if="show">这里是初始渲染的测试****************************************************************************</p>
+        </transition>
+    </div>
+    <script>
+        var app0 = new Vue({
+            el: '#app0',
+            data: {
+                show: true
+            }
+        });
+        var app1 = new Vue({
+            el: '#app1',
+            data: {
+                show: true
+            }
+        });
+        var app2 = new Vue({
+            el: '#app2',
+            data: {
+                show: true
+            },
+            methods: {
+                startEvent(e) {
+                    console.log('动画执行开始');
+                    console.log(e.srcElement.className);
+                    console.log(new Date().getTime());
+                    console.log(this.show);
+                },
+                endEvent(e) {
+                    console.log('动画执行完毕');
+                    console.log(e.srcElement.className);
+                    console.log(new Date().getTime());
+                    console.log(this.show);
+                }
+            }
+        });
+        var app3 = new Vue({
+            el: '#app3',
+            data: {
+                show: true
+            }
+        });
+        var app4 = new Vue({
+            el: '#app4',
+            data: {
+                show: true
+            }
+        });
+    </script>
+</body>
+
+</html>

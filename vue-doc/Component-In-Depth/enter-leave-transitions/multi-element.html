@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>多元素的过渡</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity .5s
+        }
+
+        .fade-enter,
+        .fade-leave-to {
+            opacity: 0
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app0">
+        <transition name="fade" mode="out-in">
+            <button :key="isOn" @click="isOn = !isOn">
+                {{isOn ? 'on': 'off'}}
+            </button>
+        </transition>
+    </div>
+    <script>
+        var app0 = new Vue({
+            el: '#app0',
+            data: {
+                isOn: true
+            }
+        });
+    </script>
+</body>
+
+</html>

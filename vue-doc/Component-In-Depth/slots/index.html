@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <todo-list :todos="todos">
+            <span>123</span>
+        </todo-list>
+        <todo-list :todos="todos">
+            <!-- 
+                作用域插操的主要作用是为了在使用的使用可以从todo-list中获取到数据, 是在父组件使用子组件数据的一种形式
+                即: slotProps 是todo-list组件所有的属性集合
+             -->
+            <template slot-scope="slotProps">
+                <span v-if="slotProps.todo.isComplete">
+                    {{ slotProps.todo.text }} - {{slotProps}}
+                </span>
+            </template>
+        </todo-list>
+    </div>
+    <script>
+        Vue.component('todo-list', {
+            props: ['todos'],
+            template: `
+                <ul>
+                    <li v-for="todo in todos" :key="todo.id">
+                        <slot :todo="todo">
+                            {{todo.text}}
+                        </slot>
+                    </li>
+                </ul>
+            `
+        });
+        var app = new Vue({
+            el: '#app',
+            data: {
+                todos: [{
+                    id: 1,
+                    isComplete: true,
+                    text: 'todo1'
+                }, {
+                    id: 2,
+                    isComplete: false,
+                    text: 'todo2'
+                }]
+            },
+            methods: {}
+        });
+    </script>
+</body>
+
+</html>

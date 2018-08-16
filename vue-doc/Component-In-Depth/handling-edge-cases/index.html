@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <pre>
+            {{$root.foo}}
+        </pre>
+        <inner-component1 ref="inner1">
+            <inner-component2 ref="inner2"></inner-component2>
+        </inner-component1>
+    </div>
+    <script>
+        Vue.component('inner-component1', {
+            template: '<div><p>{{this.$parent.foo}}</p><slot></slot></div>',
+            provide: function () {
+                return {
+                    getInnerFoo: this.innerFoo
+                }
+            },
+            data: function () {
+                return {
+                    innerFoo: 2
+                }
+            }
+        });
+        Vue.component('inner-component2', {
+            template: '<p>{{this.getInnerFoo}}</p>',
+            inject: ['getInnerFoo'],
+            data: function () {
+                return {
+                    innerFoo: 2
+                }
+            }
+        });
+        var app = new Vue({
+            el: '#app',
+            data: {
+                foo: 1
+            },
+            computed: {
+                bar: function () { /* ... */ }
+            },
+            methods: {
+                baz: function () { /* ... */ }
+            }
+        });
+    </script>
+</body>
+
+</html>

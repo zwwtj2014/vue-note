@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkUOdZ5y7hMm0yrcCQoCvLwzdM6M8s5qk"></script>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <style>
+        .map {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <google-map></google-map>
+    </div>
+    <script>
+        Vue.component('google-map', {
+            template: '<div class="map"><slot></slot></div>',
+            data() {
+                return {
+                    map: null
+                }
+            },
+            provide() {
+                return {
+                    getMaps: this.getMaps
+                }
+            },
+            mounted() {
+                this.map = new google.maps.Map(this.$el, {
+                    center: {
+                        lat: 0,
+                        lng: 0
+                    },
+                    zoom: 1
+                })
+            },
+            methods: {
+                getMaps(found) {
+                    var vm = this;
+
+                    function checkForMap() {
+                        if (vm.map) {
+                            found(vm.map);
+                        } else {
+                            setTimeout(() => {
+                                checkForMap
+                            }, 0);
+                        }
+                    }
+                    checkForMap();
+                }
+            }
+        });
+        Vue.component('google-map-marker', {
+            inject: ['getMaps'],
+            props: ['places'],
+            created() {
+                var vm = this;
+                vm.getMaps(map => {
+                    vm.places.forEach(place => {
+                        new google.maps.Marker({
+                            position: place.position,
+                            map,
+                            map
+                        });
+                    });
+                });
+            },
+            render(h) {
+                return null
+            }
+        });
+        var app = new Vue({
+            el: '#app',
+            data: {
+                vueConfCities: [{
+                    name: 'Wrocław',
+                    position: {
+                        lat: 51.107885,
+                        lng: 17.038538
+                    }
+                }, {
+                    name: 'New Orleans',
+                    position: {
+                        lat: 29.951066,
+                        lng: -90.071532
+                    }
+                }]
+            }
+        });
+    </script>
+</body>
+
+</html>
