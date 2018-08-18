@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>混入</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <script>
+        var myMixin = {
+            myOption: 'myOption in myMixin',
+            created() {
+                this.hello();
+            },
+            methods: {
+                hello() {
+                    console.log('hello from mixin');
+                }
+            }
+        };
+
+        var Component = Vue.extend({
+            mixins: [myMixin]
+        });
+
+        var component = new Component();
+    </script>
+
+    <script>
+        // 全局註冊
+        Vue.mixin({
+            created: function () {
+                var myOption = this.$options.myOption;
+                if (myOption) {
+                    console.log(myOption);
+                }
+            }
+        });
+
+        var strategies = Vue.config.optionMergeStrategies;
+        strategies.myOption = function (toVal, fromVal) {
+            console.log(toVal);
+            console.log(fromVal);
+        };
+
+        var mixin = {
+            myOption: 'hello my option from mixin',
+            data: function () {
+                return {
+                    message: 'hello',
+                    foo: 'abc'
+                };
+            },
+            created() {
+                console.log('混入对象的钩子被调用');
+            },
+            methods: {
+                fun() {
+                    console.log('fun');
+                },
+                conflicting() {
+                    console.log('from mixin');
+                }
+            }
+        };
+
+        var vm = new Vue({
+            myOption: 'hello my option from self',
+            mixins: [mixin],
+            data: function () {
+                return {
+                    message: 'goodbye',
+                    bar: 'def'
+                }
+            },
+            created() {
+                console.log(this.$data);
+                // => { message: "goodbye", foo: "abc", bar: "def" }
+                console.log('组件钩子被调用');
+            },
+            methods: {
+                baz() {
+                    console.log('baz');
+                },
+                conflicting() {
+                    console.log('from self');
+                }
+            }
+        });
+
+        vm.fun(); // fun
+        vm.baz(); // baz
+        vm.conflicting(); // from self
+    </script>
+</body>
+
+</html>

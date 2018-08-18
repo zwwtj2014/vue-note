@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自定义指令</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="demo">
+        <input type="text" v-focus v-color-swatch="'red'">
+        <hr>
+        <pre v-hook:foo.a.b="1+1"></pre>
+    </div>
+    <script>
+        Vue.directive('focus', {
+            inserted(el) {
+                el.focus();
+            }
+        });
+
+        Vue.directive('color-swatch', function (el, binding) {
+            el.style.backgroundColor = binding.value;
+        });
+
+        Vue.directive('hook', {
+            bind(el, binding, vnode) {
+                var s = JSON.stringify;
+                el.innerHTML =
+                    `
+                    name: ${s(binding.name)}
+                    value: ${s(binding.value)}
+                    expression: ${s(binding.expression)}
+                    argument: ${s(binding.arg)}
+                    modifiers: ${s(binding.modifiers)},
+                    vode keys: ${Object.keys(vnode).join(', ')}
+                `;
+            }
+        });
+        var app = new Vue({
+            el: '#demo',
+        });
+    </script>
+</body>
+
+</html>
